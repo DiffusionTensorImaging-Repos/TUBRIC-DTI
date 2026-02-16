@@ -13,11 +13,11 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://tubric.github.io',
-  baseUrl: '/dti-repo/',
+  url: 'https://diffusiontensorimaging-repos.github.io',
+  baseUrl: '/TUBRIC-DTI/',
 
-  organizationName: 'TUBRIC',
-  projectName: 'dti-repo',
+  organizationName: 'DiffusionTensorImaging-Repos',
+  projectName: 'TUBRIC-DTI',
 
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
@@ -48,7 +48,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/TUBRIC/dti-repo/tree/main/',
+          editUrl: 'https://github.com/DiffusionTensorImaging-Repos/TUBRIC-DTI/tree/main/',
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
         },
@@ -95,7 +95,7 @@ const config: Config = {
           position: 'right',
         },
         {
-          href: 'https://github.com/TUBRIC/dti-repo',
+          href: 'https://github.com/DiffusionTensorImaging-Repos/TUBRIC-DTI',
           label: 'GitHub',
           position: 'right',
         },
