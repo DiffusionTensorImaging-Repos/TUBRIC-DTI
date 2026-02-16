@@ -1,0 +1,21 @@
+#!/bin/bash
+# Post-build script for Binder environment
+# Downloads a small sample DTI dataset for practice
+
+echo "=== Setting up DTI Tutorial Practice Environment ==="
+
+# Create a sample data directory
+mkdir -p ~/data/sample_dti
+
+echo ""
+echo "============================================="
+echo "  DTI Tutorial Practice Environment Ready!"
+echo ""
+echo "  Tools available:"
+echo "    - Python with nibabel, dipy, pyAFQ"
+echo "    - JupyterLab for interactive notebooks"
+echo ""
+echo "  Note: FSL and MRtrix3 require separate"
+echo "  installation on your local system."
+echo "  See the tutorial for installation guides."
+echo "============================================="

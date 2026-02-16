@@ -1,0 +1,14 @@
+name: dti-tutorial
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - jupyterlab
+  - numpy
+  - matplotlib
+  - nibabel
+  - dipy
+  - pip
+  - pip:
+    - pyAFQ

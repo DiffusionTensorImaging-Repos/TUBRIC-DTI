@@ -1,0 +1,53 @@
+.heroBanner {
+  padding: 5rem 0 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroInner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroLabel {
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3rem 1rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.features {
+  display: flex;
+  align-items: stretch;
+  padding: 3rem 0;
+  width: 100%;
+}
+
+.pipelineSection {
+  padding: 3rem 0 4rem;
+  background: var(--ifm-background-surface-color);
+}
+
+@media screen and (max-width: 996px) {
+  .pipelineSection {
+    padding: 2rem 1rem;
+  }
+}
