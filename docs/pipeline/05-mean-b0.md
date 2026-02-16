@@ -16,7 +16,7 @@ After TOPUP corrects susceptibility distortions in the B0 images, the corrected 
 Every MRI image contains random thermal noise from the scanner electronics and the body. This noise varies randomly from volume to volume — sometimes a voxel reads slightly too high, sometimes too low. The underlying signal, however, stays consistent.
 
 When you average multiple volumes together:
-- **Noise** (random): partially cancels out, reducing by a factor of $\sqrt{N}$ where $N$ is the number of volumes averaged
+- **Noise** (random): partially cancels out, reducing by a factor of √N, where N is the number of volumes averaged
 - **Signal** (consistent): remains intact
 
 The result is a cleaner image with better contrast between brain tissue and background — exactly what you need for reliable brain extraction in the next step.

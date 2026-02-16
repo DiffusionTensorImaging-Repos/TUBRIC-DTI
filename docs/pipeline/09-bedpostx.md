@@ -128,12 +128,6 @@ For large studies, process multiple subjects simultaneously:
 # Run 4 subjects in parallel using GNU parallel
 ls -d "$base_dir"/bedpostx/sub-* | \
     parallel -j 4 "bedpostx {}"
-
-# Or submit to an HPC scheduler
-for subj_dir in "$base_dir"/bedpostx/sub-*; do
-    sbatch --wrap="bedpostx $subj_dir" \
-           --mem=8G --cpus-per-task=1 --time=24:00:00
-done
 ```
 
 ## Expected Output

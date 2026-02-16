@@ -28,17 +28,17 @@ The table below summarizes what to check after each step. Detailed guidance for 
 | Stage | What to Check | Method |
 |-------|--------------|--------|
 | [1. DICOM to NIfTI](../pipeline/dicom-to-nifti) | All expected files created, .bval/.bvec present | File audit |
-| [2. Skull Stripping](../pipeline/skull-stripping) | Brain fully preserved, no skull remaining | Visual overlay |
+| [2. Skull Stripping](../pipeline/skull-stripping) | Brain fully preserved, no skull remaining | Visual overlay (recommended) |
 | [3. B0 Concatenation](../pipeline/b0-concatenation) | Correct number of B0 volumes, both PE directions | Volume count |
-| [4. TOPUP](../pipeline/topup) | Frontal/temporal distortions reduced | Visual comparison |
-| [5. Mean B0](../pipeline/mean-b0) | Output is 3D (not 4D), reasonable contrast | `fslinfo` + visual |
-| [6. Brain Masking](../pipeline/brain-masking) | Mask covers brain, excludes skull | Visual overlay |
-| [7. Denoising](../pipeline/denoising-gibbs) | Noise reduced, edges preserved, smooth noise map | Visual comparison |
-| [8. Eddy](../pipeline/eddy) | Motion < 2 mm, few outlier slices, no residual artifacts | `eddy_quad` + visual |
+| [4. TOPUP](../pipeline/topup) | Frontal/temporal distortions reduced | File audit |
+| [5. Mean B0](../pipeline/mean-b0) | Output is 3D (not 4D), reasonable contrast | `fslinfo` |
+| [6. Brain Masking](../pipeline/brain-masking) | Mask covers brain, excludes skull | File audit |
+| [7. Denoising](../pipeline/denoising-gibbs) | Noise reduced, edges preserved | File audit |
+| [8. Eddy](../pipeline/eddy) | Motion < 2 mm, few outlier slices, no residual artifacts | `eddy_quad` + visual (recommended) |
 | [9. BedpostX](../pipeline/bedpostx) | Output directory exists, dyads files present | File audit |
 | [10. Shell Extraction](../pipeline/shell-extraction) | Correct volume count, correct b-values | `fslnvols` + `cat .bval` |
-| [11. DTIFIT](../pipeline/dtifit) | FA in 0–1 range, tracts visible, no artifacts | Visual + `fslstats` |
-| [12. Registration](../pipeline/flirt-registration) | Good alignment in standard space | Visual overlay |
+| [11. DTIFIT](../pipeline/dtifit) | FA in 0–1 range, tracts visible | `fslstats` (sanity check) |
+| [12. Registration](../pipeline/flirt-registration) | Good alignment in standard space | File audit |
 | [13. ICV](../pipeline/icv-calculation) | Volume within normal range (1200–1800 cm^3) | `fslstats` |
 | [14. BIDS Setup](../pipeline/pyafq-bids) | BIDS-compliant structure, validator passes | `bids-validator` |
 

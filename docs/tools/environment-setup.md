@@ -197,28 +197,6 @@ which dcm2niix
 Module names and versions vary across institutions. If `module avail fsl` returns nothing, check with your HPC support team — neuroimaging software is commonly installed but may be under a different name or path. Some systems use `Lmod` instead of `environment modules`, but the commands are the same.
 :::
 
-### SLURM Job Scripts
-
-On HPC systems, you submit processing jobs through a scheduler. Here is a SLURM template for DTI processing:
-
-```bash
-#!/bin/bash
-#SBATCH --job-name=dti_preproc
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=32G
-#SBATCH --time=04:00:00
-#SBATCH --output=logs/%x_%j.out
-#SBATCH --error=logs/%x_%j.err
-
-# Load modules
-module load fsl/6.0.7
-module load ants/2.5.0
-
-# Run your processing script for one subject
-bash preprocess.sh sub-001
-```
-
 ## Docker and Singularity
 
 If you cannot install software directly (e.g., no root access), containers provide a portable alternative.
