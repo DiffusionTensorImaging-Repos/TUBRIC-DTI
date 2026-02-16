@@ -11,6 +11,8 @@ BedpostX (Bayesian Estimation of Diffusion Parameters Obtained using Sampling Te
 
 BedpostX output is required for **probabilistic tractography** (`probtrackx2`). If you only need DTI scalar maps (FA, MD, RD, AD) and are not planning to do tractography, you can skip this step.
 
+**Further reading:** [FDT Tractography Practical](https://fsl.fmrib.ox.ac.uk/fslcourse/2019_Beijing/lectures/FDT/fdt2.html) — FSL Course (Beijing 2019)
+
 ## Conceptual Background
 
 ### Why Single-Tensor Models Are Not Enough
@@ -35,7 +37,6 @@ The volume fractions sum to ≤ 1, with the remainder attributed to isotropic (n
 | Plan | Run BedpostX? | Why |
 |------|--------------|-----|
 | Probabilistic tractography (`probtrackx2`) | **Yes** — required | probtrackx2 uses BedpostX fiber orientation distributions |
-| Automated tract segmentation (pyAFQ, TractSeg) | **Yes** — recommended | Better tract identification with crossing fiber data |
 | DTI scalar maps only (FA, MD, RD) | **No** — skip to [Step 10](./shell-extraction) | DTIFIT is sufficient for scalar maps |
 | Connectome analysis | **Yes** — required | Tractography-based connectivity requires BedpostX |
 

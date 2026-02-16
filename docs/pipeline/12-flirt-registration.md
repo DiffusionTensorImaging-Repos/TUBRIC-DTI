@@ -15,6 +15,8 @@ Registration aligns images from different spaces so that the same brain structur
 
 This step computes six transformation matrices that let you move images and coordinates freely between these spaces.
 
+**Further reading:** [FSL Registration Practical](https://fsl.fmrib.ox.ac.uk/fslcourse/graduate/lectures/practicals/registration/) — FSL Course
+
 ## Conceptual Background
 
 ### Why Register?

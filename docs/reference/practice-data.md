@@ -87,31 +87,6 @@ Plan your storage before downloading:
 Preprocessing generates intermediate files at each stage. For multi-shell data, expect to use 5–10 GB per subject in addition to the raw data. BedpostX alone generates 2–5 GB of output. Plan for 3–5x your raw data size in total disk space.
 :::
 
-## Interactive Environment (Binder)
-
-Click the badge below to launch a free cloud environment with pre-installed neuroimaging tools and sample data — no local installation required.
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/TUBRIC/dti-repo/main?urlpath=lab)
-
-### What is Included
-
-The Binder environment comes with:
-- **FSL** core tools (fslroi, fslmerge, fslmaths, bet, topup, eddy, dtifit, flirt)
-- **MRtrix3** (dwidenoise, mrdegibbs, dwiextract, mrinfo)
-- **dcm2niix** for DICOM conversion
-- **Python** with DIPY, nibabel, and pyAFQ
-- A sample single-subject dataset ready to process
-- Jupyter notebooks walking through selected pipeline steps
-
-### Binder Limitations
-
-- **Session timeout**: Sessions terminate after ~10 minutes of inactivity. Save your work frequently.
-- **Limited resources**: ~2 GB RAM, limited CPU. Some steps (BedpostX, ANTs skull stripping) are too slow or memory-intensive for Binder.
-- **No GPU**: eddy_cuda and bedpostx_gpu are not available. Use the CPU versions.
-- **Ephemeral**: All data is lost when the session ends. Download any files you want to keep.
-
-For serious work, install the tools locally — see [Environment Setup](../tools/environment-setup).
-
 ## Setting Up Your Own Practice Environment
 
 If you prefer to work locally:

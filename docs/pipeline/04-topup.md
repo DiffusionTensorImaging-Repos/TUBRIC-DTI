@@ -9,6 +9,8 @@ title: "Step 4: TOPUP (Susceptibility Distortion Correction)"
 
 TOPUP estimates and corrects the **geometric distortions** caused by magnetic susceptibility differences near air-tissue boundaries in the brain. Using the paired AP/PA B0 images prepared in [Step 3](./b0-concatenation), TOPUP models the underlying magnetic field inhomogeneity and computes a correction warp that "unwarps" the distorted EPI images back to their true geometry.
 
+**Further reading:** [TBSS #4: topup and eddy](https://andysbrainbook.readthedocs.io/en/latest/TBSS/TBSS_Course/TBSS_04_TopUpEddy.html) — Andy's Brain Book
+
 ## Conceptual Background
 
 ### The Problem: Susceptibility-Induced Distortion

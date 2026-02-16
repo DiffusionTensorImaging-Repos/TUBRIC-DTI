@@ -5,8 +5,6 @@ title: "Diffusion Physics"
 
 # The Physics of Diffusion MRI
 
-Understanding what your images actually measure helps you make better decisions at every preprocessing step. This page covers the physical principles behind diffusion MRI — from molecular motion to the images on your screen.
-
 ## Water Molecules Are Always Moving
 
 Every water molecule in your body is in constant random motion, bouncing off other molecules billions of times per second. This is **Brownian motion**, named after Robert Brown who first observed it in 1827 (though he was watching pollen grains, not water molecules).

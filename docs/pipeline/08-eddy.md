@@ -9,6 +9,8 @@ title: "Step 8: Eddy Current & Motion Correction"
 
 Eddy current correction is the single most critical preprocessing step in a diffusion MRI pipeline. Every diffusion-weighted volume is acquired with a different gradient direction, and the rapidly switching magnetic field gradients required for diffusion encoding induce **eddy currents** in the conducting structures of the scanner (the cryostat, gradient coils, and RF shields). These eddy currents produce secondary magnetic fields that distort each image differently, introducing volume-specific shearing, scaling, and translational artifacts. Simultaneously, subjects inevitably move during the long diffusion acquisition (typically 10-20 minutes), and even sub-millimeter head motion degrades diffusion metric estimates.
 
+**Further reading:** [FSL eddy documentation](https://fsl.fmrib.ox.ac.uk/fsl/docs/diffusion/eddy/index.html) — FSL Official Documentation
+
 FSL's `eddy` corrects both eddy-current distortions and subject motion in a single, integrated framework. It models eddy-current-induced distortions as a function of the applied diffusion gradient direction and strength, while simultaneously estimating six rigid-body motion parameters (three translations, three rotations) for each volume. When TOPUP output is provided, `eddy` also applies susceptibility-induced distortion correction. Optionally, `eddy` can detect and replace outlier slices rather than discarding entire volumes, preserving as much data as possible.
 
 ## Conceptual Background

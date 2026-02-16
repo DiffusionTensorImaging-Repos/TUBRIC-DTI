@@ -3,58 +3,34 @@ sidebar_position: 11
 title: "Step 10: Shell Extraction"
 ---
 
-# Step 10: DWI Shell Extraction
+# Step 10: Removing the b=250 Shell
 
-## Overview
+If your acquisition includes a low b-value shell (e.g., b=250 s/mm²), this step removes it. At b-values below ~300 s/mm², microvascular perfusion contaminates the diffusion signal through a phenomenon called **intravoxel incoherent motion (IVIM)**. This pseudo-diffusion from capillary blood flow inflates apparent diffusivity estimates by 4–8% and can cause instability in tensor fitting.
 
-After eddy correction, your 4D DWI dataset may contain data from **multiple b-value shells** (e.g., b=0, 1000, 2000, 3000). Different downstream analyses require different shell combinations. This step extracts the specific shells you need, producing a smaller, targeted dataset for each planned analysis.
+Most modern diffusion protocols do not collect b=250 at all — the Human Connectome Project uses b=1000/2000/3000, UK Biobank uses b=1000/2000, and ABCD uses b=500/1000/2000/3000. Labs at Temple University have also confirmed that including b=250 volumes introduces instability in downstream modeling.
 
-## Conceptual Background
+If your data does not include a low b-value shell like b=250, skip this step.
 
-### What Are Shells?
+**Further reading:** [FSL Diffusion Toolbox Practical](https://fsl.fmrib.ox.ac.uk/fslcourse/2019_Beijing/lectures/FDT/fdt1.html) — FSL Course (Beijing 2019)
 
-A "shell" refers to a group of DWI volumes acquired with the same b-value. The b-value controls how much diffusion weighting is applied:
+## Inspecting Your Shells
 
-- **b=0**: No diffusion weighting — shows anatomy without diffusion contrast
-- **b≈1000**: Moderate diffusion weighting — standard for DTI, good balance of SNR and diffusion contrast
-- **b≈2000–3000**: High diffusion weighting — more sensitive to restricted diffusion, better for advanced models (CSD, NODDI)
-
-### Which Shells Do I Need?
-
-This depends on your planned analysis:
-
-| Analysis | Required Shells | Why |
-|----------|----------------|-----|
-| **DTI / DTIFIT** | b=0 + one shell (typically b≈1000) | Single-tensor model assumes Gaussian diffusion — works best at moderate b-values |
-| **CSD (constrained spherical deconvolution)** | b=0 + one or more higher shells (b≈2000–3000) | Needs strong diffusion weighting to resolve crossing fibers |
-| **NODDI** | b=0 + at least 2 non-zero shells | Multi-compartment model requires multiple b-values to separate intra/extracellular water |
-| **DKI (diffusion kurtosis imaging)** | b=0 + at least 2 non-zero shells (b≈1000, 2000) | Kurtosis estimation requires multiple b-values |
-| **Free water elimination** | b=0 + at least 2 non-zero shells | Separating free water from tissue requires multi-shell data |
-
-### Inspecting Your Shells
-
-Before extracting, check what shells you actually have:
+Before extracting, check what shells you have:
 
 ```bash
-# Option 1: Read the .bval file directly
+# Read the .bval file directly
 cat "$input_dir/${subj}_dti.bval"
-# Example: 0 0 1000 1000 1000 2000 2000 2000 3000 3000 ...
+# Example: 0 0 250 250 1000 1000 1000 2000 2000 2000 3250 3250 5000 5000 ...
 
-# Option 2: Use MRtrix3 to identify detected shells
+# Use MRtrix3 to identify detected shells
 mrinfo "$input_dir/${subj}_eddy.nii.gz" \
     -fslgrad "$input_dir/${subj}_eddy.eddy_rotated_bvecs" "$input_dir/${subj}_dti.bval" \
     -shell_bvalues
-# Example output: 0 1000 2000 3000
-
-# Option 3: Count volumes per shell
-mrinfo "$input_dir/${subj}_eddy.nii.gz" \
-    -fslgrad "$input_dir/${subj}_eddy.eddy_rotated_bvecs" "$input_dir/${subj}_dti.bval" \
-    -shell_sizes
-# Example output: 6 64 64 64
+# Example output: 0 250 1000 2000 3250 5000
 ```
 
 :::tip B-Values Are Not Always Exact
-Scanners often produce b-values like 998, 1003, or 2005 instead of exactly 1000 or 2000. MRtrix3 handles this automatically by grouping b-values within a tolerance (default ±100). So `dwiextract -shells 0,1000` will correctly capture volumes with b=998, 1003, etc.
+Scanners often produce b-values like 248, 1003, or 2005 instead of exactly 250, 1000, or 2000. MRtrix3 handles this automatically by grouping b-values within a tolerance (default ±100).
 :::
 
 ## Prerequisites
@@ -66,12 +42,12 @@ Scanners often produce b-values like 998, 1003, or 2005 instead of exactly 1000 
 | b-values | [Step 1: DICOM to NIfTI](./dicom-to-nifti) | Original b-value file |
 
 :::caution Use Rotated bvecs
-**Always** use the rotated bvecs from eddy (`eddy_rotated_bvecs`), **not** the original bvecs from DICOM conversion. During scanning, the subject's head rotates slightly between volumes. Eddy detects these rotations and updates the gradient directions accordingly. Using the original (unrotated) bvecs means your gradient directions no longer match the data, leading to incorrect FA/MD values and inaccurate tractography.
+**Always** use the rotated bvecs from eddy (`eddy_rotated_bvecs`), **not** the original bvecs from DICOM conversion. Eddy corrects for head rotation during the scan and updates the gradient directions accordingly. Using the original bvecs means your gradient directions no longer match the data.
 :::
 
-## Commands
+## Command
 
-### Extract Shells for DTI (b=0 + b=1000)
+Remove b=250 by extracting only the shells you want to keep:
 
 ```bash
 # ──────────────────────────────────────────────
@@ -84,134 +60,72 @@ output_dir="$base_dir/shells/$subj"
 mkdir -p "$output_dir"
 
 # ──────────────────────────────────────────────
-# Extract b=0 and b=1000 for tensor fitting
+# Remove b=250, keep all other shells
 # ──────────────────────────────────────────────
 dwiextract "$eddy_dir/${subj}_eddy.nii.gz" \
-    "$output_dir/${subj}_data_b1000.nii.gz" \
+    "$output_dir/${subj}_dwi_no_b250.nii.gz" \
     -fslgrad "$eddy_dir/${subj}_eddy.eddy_rotated_bvecs" \
              "$nifti_dir/${subj}_dti.bval" \
-    -shells 0,1000 \
-    -export_grad_fsl "$output_dir/${subj}_data_b1000.bvec" \
-                     "$output_dir/${subj}_data_b1000.bval"
+    -shells 0,1000,2000,3250,5000 \
+    -export_grad_fsl "$output_dir/${subj}_dwi_no_b250.bvec" \
+                     "$output_dir/${subj}_dwi_no_b250.bval"
 ```
 
-### Extract Shells for Multi-Shell Analysis (b=0 + b=1000 + b=2000)
+Adjust the `-shells` values to match your acquisition. The key is to list every shell you want to **keep**, omitting b=250.
 
-```bash
-# ──────────────────────────────────────────────
-# Extract b=0, 1000, and 2000 for CSD/NODDI
-# ──────────────────────────────────────────────
-dwiextract "$eddy_dir/${subj}_eddy.nii.gz" \
-    "$output_dir/${subj}_data_b1000_2000.nii.gz" \
-    -fslgrad "$eddy_dir/${subj}_eddy.eddy_rotated_bvecs" \
-             "$nifti_dir/${subj}_dti.bval" \
-    -shells 0,1000,2000 \
-    -export_grad_fsl "$output_dir/${subj}_data_b1000_2000.bvec" \
-                     "$output_dir/${subj}_data_b1000_2000.bval"
-```
-
-### Single-Shell Data (No Extraction Needed)
-
-If your data has only b=0 and one non-zero shell (e.g., a standard DTI protocol with 30 directions at b=1000), shell extraction is unnecessary. You can pass the eddy-corrected data directly to DTIFIT.
-
-## Batch Processing Script
+## Batch Processing
 
 ```bash
 #!/bin/bash
-# shell_extraction.sh — Extract b-value shells for all subjects
+# shell_extraction.sh — Remove b=250 shell for all subjects
 
 base_dir="/path/to/project"
-eddy_dir="$base_dir/eddy"
-nifti_dir="$base_dir/nifti"
-output_dir="$base_dir/shells"
 
-# ============================================================
-# IMPORTANT: Adjust the -shells flag to match YOUR b-values
-# Check your .bval files to see what shells you have
-# ============================================================
-
-subjects=$(ls -d "$eddy_dir"/sub-* 2>/dev/null | xargs -n1 basename)
-
-for subj in $subjects; do
+for subj_dir in "$base_dir"/eddy/sub-*; do
+    subj=$(basename "$subj_dir")
     echo "Processing: $subj"
 
-    input="$eddy_dir/$subj/${subj}_eddy.nii.gz"
-    bvecs="$eddy_dir/$subj/${subj}_eddy.eddy_rotated_bvecs"
-    bvals="$nifti_dir/$subj/dti/${subj}_dti.bval"
+    mkdir -p "$base_dir/shells/$subj"
 
-    if [ ! -f "$input" ]; then
-        echo "  WARNING: Missing eddy output for $subj — skipping"
-        continue
-    fi
-
-    mkdir -p "$output_dir/$subj"
-
-    # Extract b=0 + b=1000 for tensor fitting
-    dwiextract "$input" \
-        "$output_dir/$subj/${subj}_data_b1000.nii.gz" \
-        -fslgrad "$bvecs" "$bvals" \
-        -shells 0,1000 \
-        -export_grad_fsl "$output_dir/$subj/${subj}_data_b1000.bvec" \
-                         "$output_dir/$subj/${subj}_data_b1000.bval"
+    dwiextract "$subj_dir/${subj}_eddy.nii.gz" \
+        "$base_dir/shells/$subj/${subj}_dwi_no_b250.nii.gz" \
+        -fslgrad "$subj_dir/${subj}_eddy.eddy_rotated_bvecs" \
+                 "$base_dir/nifti/$subj/dti/${subj}_dti.bval" \
+        -shells 0,1000,2000,3250,5000 \
+        -export_grad_fsl "$base_dir/shells/$subj/${subj}_dwi_no_b250.bvec" \
+                         "$base_dir/shells/$subj/${subj}_dwi_no_b250.bval"
 
     echo "  Done: $subj"
 done
-
-echo "Shell extraction complete."
 ```
-
-## Expected Output
-
-| File | Description |
-|------|-------------|
-| `${subj}_data_b1000.nii.gz` | 4D volume containing only b=0 and b=1000 volumes |
-| `${subj}_data_b1000.bvec` | Updated gradient directions for the extracted subset |
-| `${subj}_data_b1000.bval` | Updated b-values for the extracted subset |
 
 ## Quality Check
 
-### 1. Verify Volume Count
+### Verify Volume Count
 
-The number of volumes should match the number of b-values:
-
-```bash
-fslnvols "$output_dir/$subj/${subj}_data_b1000.nii.gz"
-# Example: 70
-
-wc -w < "$output_dir/$subj/${subj}_data_b1000.bval"
-# Should match: 70
-```
-
-### 2. Verify Correct B-Values
+The number of volumes should decrease by the number of b=250 volumes that were removed:
 
 ```bash
-cat "$output_dir/$subj/${subj}_data_b1000.bval"
-# Should only contain values near 0 and 1000
-# Example: 0 0 0 0 0 0 1000 1000 1000 1000 ...
+# Compare volume counts
+fslnvols "$eddy_dir/${subj}_eddy.nii.gz"
+# Example: 198 (original)
+
+fslnvols "$output_dir/${subj}_dwi_no_b250.nii.gz"
+# Example: 186 (after removing 12 b=250 volumes)
 ```
 
-### 3. Verify Rotated Bvecs Were Used
+### Verify Correct B-Values
 
 ```bash
-# Check that the bvecs are not identical to the original
-# (they should differ slightly due to head motion corrections)
-diff "$output_dir/$subj/${subj}_data_b1000.bvec" \
-     "$nifti_dir/$subj/dti/${subj}_dti.bvec"
-# Should show differences (if the subject moved at all during the scan)
+cat "$output_dir/${subj}_dwi_no_b250.bval"
+# Should contain only values near 0, 1000, 2000, 3250, 5000
+# No values near 250
 ```
-
-## Common Issues
-
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| "No volumes match the specified shells" | Your b-values do not include the shell you requested | Check your actual b-values with `cat file.bval` or `mrinfo -shell_bvalues` |
-| Wrong number of volumes | b-value tolerance issue | MRtrix3 uses a tolerance of ±100 by default; if your b-values are far from the nominal value, use `-shell_bvalue_scaling` |
-| Used original bvecs instead of rotated | Common mistake | Always use `eddy_rotated_bvecs` from the eddy output directory |
-| Single-shell data, nothing to extract | Only one non-zero b-value in the data | Skip this step; use the full eddy-corrected dataset directly |
 
 ## References
 
-- Jones DK (2004). The effect of gradient sampling schemes on measures derived from diffusion tensor MRI: A Monte Carlo study. *Magnetic Resonance in Medicine*, 51(4), 807-815.
+- Federau C, O'Brien K, Meuli R, et al. (2014). Measuring brain perfusion with intravoxel incoherent motion (IVIM): initial clinical experience. *Journal of Magnetic Resonance Imaging*, 39(3), 624-632.
+- Pasternak O, Sochen N, Gur Y, Intrator N, Assaf Y (2009). Free water elimination and mapping from diffusion MRI. *Magnetic Resonance in Medicine*, 62(3), 717-730.
 - MRtrix3 dwiextract: [https://mrtrix.readthedocs.io/en/latest/reference/commands/dwiextract.html](https://mrtrix.readthedocs.io/en/latest/reference/commands/dwiextract.html)
 
 ## Next Step

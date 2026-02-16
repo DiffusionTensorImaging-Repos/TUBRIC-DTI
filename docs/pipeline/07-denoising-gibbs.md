@@ -14,6 +14,8 @@ This step applies two artifact corrections to the raw DWI data using MRtrix3:
 
 These corrections improve the quality of the diffusion data before eddy current and motion correction in the next step.
 
+**Further reading:** [DWI Denoising](https://mrtrix.readthedocs.io/en/latest/dwi_preprocessing/denoising.html) — MRtrix3 Documentation
+
 ## Conceptual Background
 
 ### Thermal Noise and MP-PCA Denoising

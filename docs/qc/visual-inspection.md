@@ -5,8 +5,6 @@ title: "Visual Inspection"
 
 # Visual Inspection with FSLeyes
 
-The two stages where visual inspection matters most are **skull stripping** and **eddy correction**. For everything else, checking that the output files exist is usually sufficient.
-
 ## Skull Stripping (Step 2)
 
 Overlay the extracted brain on the original T1 to check the result:

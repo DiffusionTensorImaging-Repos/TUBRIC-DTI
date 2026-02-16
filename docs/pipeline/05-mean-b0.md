@@ -9,6 +9,8 @@ title: "Step 5: Mean B0 Image"
 
 After TOPUP corrects susceptibility distortions in the B0 images, the corrected output is still a **4D volume** containing multiple B0 volumes (typically 2 — one from each phase-encoding direction). This step averages those corrected B0 volumes across time to produce a single **3D volume** with improved signal-to-noise ratio (SNR). This mean B0 image becomes the reference for brain mask creation in the next step.
 
+**Further reading:** [Preprocessing of Diffusion Data](https://lcni.uoregon.edu/wiki/preprocessing-of-diffusion-data/) — Lewis Center for Neuroimaging, University of Oregon
+
 ## Conceptual Background
 
 ### Why Average Multiple B0 Volumes?
