@@ -49,6 +49,12 @@ const sidebars: SidebarsConfig = {
         'pipeline/flirt-registration',
         'pipeline/icv-calculation',
         'pipeline/pyafq-bids',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Quality Control',
+      items: [
         'qc/visual-inspection',
         'qc/eddy-qc',
       ],
