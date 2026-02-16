@@ -1,44 +1,49 @@
 /**
  * TUBRIC DTI Tutorial — Custom Styles
- * Temple University brand colors applied to Infima framework
+ * Clean, professional palette — Temple Cherry as a subtle accent only
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Temple Cherry */
-  --ifm-color-primary: #9D2235;
-  --ifm-color-primary-dark: #8D1E30;
-  --ifm-color-primary-darker: #851C2D;
-  --ifm-color-primary-darkest: #6E1725;
-  --ifm-color-primary-light: #AD263A;
-  --ifm-color-primary-lighter: #B5283D;
-  --ifm-color-primary-lightest: #C83E53;
+  /* Calm slate-blue primary — softer, less intense */
+  --ifm-color-primary: #3A6B8C;
+  --ifm-color-primary-dark: #34607E;
+  --ifm-color-primary-darker: #315A77;
+  --ifm-color-primary-darkest: #284A62;
+  --ifm-color-primary-light: #40769A;
+  --ifm-color-primary-lighter: #437BA1;
+  --ifm-color-primary-lightest: #5590B5;
 
   --ifm-code-font-size: 95%;
   --ifm-font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --docusaurus-highlighted-code-line-bg: rgba(157, 34, 53, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(58, 107, 140, 0.07);
 
-  /* Additional TUBRIC vars */
-  --tubric-bg-subtle: #faf5f6;
-  --tubric-border: #e8d0d4;
+  /* Temple Cherry — accent only */
+  --tubric-cherry: #9D2235;
+  --tubric-cherry-soft: #C7657A;
+  --tubric-bg-subtle: #f8f9fb;
+  --tubric-border: #e4e7ec;
   --tubric-accent-gold: #C8A951;
 }
 
 [data-theme='dark'] {
-  --ifm-color-primary: #E8506A;
-  --ifm-color-primary-dark: #E43A57;
-  --ifm-color-primary-darker: #E22E4D;
-  --ifm-color-primary-darkest: #C81A3A;
-  --ifm-color-primary-light: #EC667D;
-  --ifm-color-primary-lighter: #EE7287;
-  --ifm-color-primary-lightest: #F498A7;
-  --docusaurus-highlighted-code-line-bg: rgba(232, 80, 106, 0.15);
+  --ifm-color-primary: #82B4D4;
+  --ifm-color-primary-dark: #6DA7CC;
+  --ifm-color-primary-darker: #62A0C8;
+  --ifm-color-primary-darkest: #428DBB;
+  --ifm-color-primary-light: #97C1DC;
+  --ifm-color-primary-lighter: #A2C8E0;
+  --ifm-color-primary-lightest: #C2DBEC;
+  --docusaurus-highlighted-code-line-bg: rgba(130, 180, 212, 0.1);
+
+  --tubric-bg-subtle: rgba(255, 255, 255, 0.03);
+  --tubric-border: rgba(255, 255, 255, 0.08);
 }
 
-/* Hero banner styling */
+/* Hero banner — soft gradient, not overpowering */
 .hero--primary {
-  background: linear-gradient(135deg, #9D2235 0%, #6E1725 100%);
+  background: linear-gradient(135deg, #3A6B8C 0%, #2C4460 60%, #5C2434 100%);
 }
 
 .hero--primary .hero__title {
@@ -56,7 +61,7 @@
 /* Feature cards */
 .feature-card {
   background: var(--ifm-card-background-color);
-  border: 1px solid var(--ifm-toc-border-color);
+  border: 1px solid var(--tubric-border);
   border-radius: 12px;
   padding: 2rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -64,7 +69,7 @@
 
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 /* Pipeline stage cards in overview */
@@ -127,7 +132,7 @@ table th {
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.5rem;
-  border: 2px solid var(--ifm-toc-border-color);
+  border: 1px solid var(--tubric-border);
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -144,7 +149,7 @@ table th {
 }
 
 [data-theme='dark'] .pipeline-explorer__stage:hover {
-  background: rgba(232, 80, 106, 0.08);
+  background: rgba(130, 180, 212, 0.06);
 }
 
 .pipeline-explorer__number {

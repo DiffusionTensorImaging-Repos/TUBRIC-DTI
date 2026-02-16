@@ -3,89 +3,149 @@ sidebar_position: 15
 title: "Step 14: BIDS Conversion & pyAFQ"
 ---
 
-# Step 14: BIDS Conversion and Automated Fiber Quantification
-
-:::info Coming Soon
-Full tutorial content is under development. The key concepts and commands are outlined below.
-:::
+# Step 14: BIDS Organization and Automated Fiber Quantification
 
 ## Overview
 
-The final preprocessing step organizes all outputs into the **Brain Imaging Data Structure (BIDS)** format and prepares data for **pyAFQ** (Automated Fiber Quantification). BIDS provides a standardized directory structure that ensures compatibility with a wide ecosystem of analysis tools.
+The final step organizes all preprocessed outputs into the **Brain Imaging Data Structure (BIDS)** format and runs **pyAFQ** for automated white matter tract identification and profiling. BIDS is a standardized directory structure that ensures your data is compatible with a wide ecosystem of neuroimaging analysis tools.
 
-## BIDS Directory Structure
+## Conceptual Background
 
-pyAFQ expects data organized as:
+### What Is BIDS?
 
-```
-derivatives/
-  sub-001/
-    dwi/
-      sub-001_dwi.nii.gz           # Eddy-corrected DWI
-      sub-001_dwi.bval             # B-values
-      sub-001_dwi.bvec             # Rotated b-vectors (from eddy)
-      sub-001_dwi_desc-brain_mask.nii.gz  # Brain mask
-    anat/
-      sub-001_T1w.nii.gz           # Original T1 structural
-      sub-001_desc-brain_T1w.nii.gz    # Brain-extracted T1
-      sub-001_desc-brain_mask.nii.gz   # T1 brain mask
-```
+BIDS (Brain Imaging Data Structure) is a community standard for organizing neuroimaging data. Instead of every lab inventing their own directory structure, BIDS provides a consistent convention that:
 
-## Organizing Data
+- Makes data immediately usable by BIDS-aware tools (no reformatting needed)
+- Makes datasets shareable and reproducible
+- Provides clear naming conventions so anyone can understand the data organization
+
+For preprocessed (derivative) data, BIDS requires:
+- A specific directory hierarchy (`derivatives/pipeline_name/sub-XXX/dwi/`)
+- Standardized file naming (`sub-001_dwi.nii.gz`, `sub-001_dwi.bvec`, etc.)
+- A `dataset_description.json` file describing the pipeline
+
+### What Is pyAFQ?
+
+pyAFQ (Automated Fiber Quantification) takes your preprocessed, BIDS-organized diffusion data and:
+
+1. **Identifies major white matter tracts** — 24 bundles by default (corticospinal tract, arcuate fasciculus, etc.)
+2. **Profiles diffusion metrics along each tract** — sampling FA, MD, RD, AD at 100 points along each bundle
+3. **Produces analysis-ready output** — CSV tables and visualizations for statistical testing
+
+See the [pyAFQ tool page](../tools/pyafq) for installation and configuration details.
+
+## Prerequisites
+
+| Input | Source | Description |
+|-------|--------|-------------|
+| Eddy-corrected DWI | [Step 8: Eddy](./eddy) | Preprocessed diffusion data |
+| Rotated bvecs | [Step 8: Eddy](./eddy) | Motion-corrected gradient directions |
+| b-values | [Step 1: DICOM to NIfTI](./dicom-to-nifti) | Original b-value file |
+| Brain mask | [Step 6: Brain Masking](./brain-masking) | Binary mask in diffusion space |
+| T1 structural | [Step 1](./dicom-to-nifti) | Original structural image |
+| Brain-extracted T1 | [Step 2: Skull Stripping](./skull-stripping) | Skull-stripped T1 |
+
+## Step 1: Create BIDS Directory Structure
 
 ```bash
-# Create BIDS directory structure
-bids_dir="$project_dir/derivatives"
-subj_bids="sub-${subj}"
-mkdir -p "$bids_dir/${subj_bids}/dwi" "$bids_dir/${subj_bids}/anat"
+# ──────────────────────────────────────────────
+# Define paths
+# ──────────────────────────────────────────────
+project_dir="/path/to/project"
+bids_dir="$project_dir/derivatives/dmriprep"
 
-# Copy DWI data
-cp "$eddy_dir/${subj}_eddy.nii.gz" \
-   "$bids_dir/${subj_bids}/dwi/${subj_bids}_dwi.nii.gz"
-cp "$eddy_dir/${subj}_eddy.eddy_rotated_bvecs" \
-   "$bids_dir/${subj_bids}/dwi/${subj_bids}_dwi.bvec"
-cp "$input_dir/${subj}_dwi.bval" \
-   "$bids_dir/${subj_bids}/dwi/${subj_bids}_dwi.bval"
-cp "$mask_dir/${subj}_brain_mask.nii.gz" \
-   "$bids_dir/${subj_bids}/dwi/${subj_bids}_dwi_desc-brain_mask.nii.gz"
+mkdir -p "$bids_dir"
 
-# Copy anatomical data
-cp "$nifti_dir/${subj}_struct.nii" \
-   "$bids_dir/${subj_bids}/anat/${subj_bids}_T1w.nii"
-cp "$ants_dir/${subj}_BrainExtractionBrain.nii.gz" \
-   "$bids_dir/${subj_bids}/anat/${subj_bids}_desc-brain_T1w.nii.gz"
-cp "$ants_dir/${subj}_BrainExtractionMask.nii.gz" \
-   "$bids_dir/${subj_bids}/anat/${subj_bids}_desc-brain_mask.nii.gz"
+# ──────────────────────────────────────────────
+# Create dataset_description.json (required by BIDS)
+# ──────────────────────────────────────────────
+cat > "$bids_dir/dataset_description.json" << 'EOF'
+{
+  "Name": "DTI Preprocessing Pipeline",
+  "BIDSVersion": "1.6.0",
+  "PipelineDescription": {
+    "Name": "custom-dti-pipeline",
+    "Version": "1.0.0",
+    "Description": "FSL/ANTs/MRtrix3-based DTI preprocessing"
+  }
+}
+EOF
 ```
 
-## Running pyAFQ
+## Step 2: Copy Preprocessed Data
+
+```bash
+# ──────────────────────────────────────────────
+# For each subject, copy files into BIDS structure
+# ──────────────────────────────────────────────
+eddy_dir="$project_dir/eddy/$subj"
+nifti_dir="$project_dir/nifti/$subj"
+mask_dir="$project_dir/topup/$subj"
+ants_dir="$project_dir/ants/$subj"
+
+mkdir -p "$bids_dir/$subj/dwi" "$bids_dir/$subj/anat"
+
+# DWI data
+cp "$eddy_dir/${subj}_eddy.nii.gz" \
+   "$bids_dir/$subj/dwi/${subj}_dwi.nii.gz"
+
+cp "$eddy_dir/${subj}_eddy.eddy_rotated_bvecs" \
+   "$bids_dir/$subj/dwi/${subj}_dwi.bvec"
+
+cp "$nifti_dir/dti/${subj}_dti.bval" \
+   "$bids_dir/$subj/dwi/${subj}_dwi.bval"
+
+cp "$mask_dir/${subj}_topup_Tmean_brain_mask.nii.gz" \
+   "$bids_dir/$subj/dwi/${subj}_space-dwi_desc-brain_mask.nii.gz"
+
+# Anatomical data
+cp "$nifti_dir/struct/${subj}_struct.nii.gz" \
+   "$bids_dir/$subj/anat/${subj}_T1w.nii.gz"
+
+cp "$ants_dir/${subj}_BrainExtractionBrain.nii.gz" \
+   "$bids_dir/$subj/anat/${subj}_desc-brain_T1w.nii.gz"
+```
+
+## Step 3: Run pyAFQ
+
+### Python API
 
 ```python
-import AFQ.api.bundle_dict as abd
-from AFQ.api.participant import ParticipantAFQ
+import AFQ.api.group as afq
 
-myafq = ParticipantAFQ(
-    bids_path="path/to/derivatives",
-    participant_id="sub-001",
+myafq = afq.GroupAFQ(
+    bids_path="/path/to/project",
+    preproc_pipeline="dmriprep",
 )
+
 myafq.export_all()
 ```
 
-Or using the configuration file:
+### Command Line
+
 ```bash
-pyafq path/to/afq_config.toml
+pyAFQ config --output afq_config.toml
+# Edit afq_config.toml, then:
+pyAFQ run afq_config.toml
 ```
 
-See [Configuration Files](/docs/reference/config-files) for details on `afq_config.toml`.
+## pyAFQ Output
 
-## What pyAFQ Produces
+| Output | Description |
+|--------|-------------|
+| `combined_tract_profiles.csv` | All subjects' tract profiles — primary analysis output |
+| `*_tractography.trk` | Streamline files per bundle |
+| `*_viz.html` | Interactive 3D visualizations |
 
-- Tract profiles: FA, MD, RD, AD sampled along 24 major white matter bundles
-- Tractography results: streamlines for each bundle
-- Interactive visualizations via AFQ-Browser
+## Quality Check
+
+1. **Validate BIDS**: run `bids-validator` or use the [online validator](https://bids-standard.github.io/bids-validator/)
+2. **Review visualizations**: open HTML files in a browser to verify tract segmentations
+3. **Check profile completeness**: ensure all subjects have all expected tracts
 
 ## References
 
+- Gorgolewski KJ, et al. (2016). The brain imaging data structure. *Scientific Data*, 3, 160044.
 - Yeatman JD, et al. (2012). Tract profiles of white matter properties. *PLoS One*, 7(11), e49790.
-- Kruper J, et al. (2021). Evaluating the reliability of human brain white matter tractometry. *Aperture Neuro*.
-- BIDS Specification: [https://bids-specification.readthedocs.io/](https://bids-specification.readthedocs.io/)
+- [BIDS Specification](https://bids-specification.readthedocs.io/)
+- [pyAFQ Documentation](https://yeatmanlab.github.io/pyAFQ/)

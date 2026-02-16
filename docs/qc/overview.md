@@ -5,70 +5,93 @@ title: "Quality Control Overview"
 
 # Quality Control in DTI Preprocessing
 
-Quality control (QC) is not an optional add-on — it is an integral part of every preprocessing step. A single subject with severe motion artifacts or failed skull stripping can distort group-level statistics and undermine entire analyses.
+Quality control is not an optional step you do at the end — it is woven into every stage of preprocessing. A single subject with severe motion or a failed skull strip can quietly distort your group statistics. Catching problems early saves weeks of troubleshooting later.
 
-## QC Philosophy
+## How to Think About QC
 
-Every preprocessing step should be audited for:
-1. **Completeness**: did the expected output files get created?
-2. **Correctness**: do the outputs look reasonable upon visual inspection?
-3. **Consistency**: are the results consistent across subjects?
+Every preprocessing step produces outputs that can go wrong in predictable ways. Your job at each stage is to answer three questions:
 
-## The Three Levels of QC
+1. **Did it finish?** Check that the expected output files exist and are not empty or corrupted.
+2. **Does it look right?** Open the images in FSLeyes and verify they match what you expect.
+3. **Are the numbers reasonable?** Compare quantitative metrics against known ranges and across your sample.
 
-### 1. Automated Audits
-After each pipeline stage, run a script that checks for the existence and validity of all expected output files. These audits catch missing files, failed jobs, and obvious errors.
+Most problems fall into one of these categories:
 
-```bash
-# Generic audit pattern
-for subj in "$base_dir"/*/; do
-  subj_id=$(basename "$subj")
-  if [ -f "$output_dir/${subj_id}_expected_output.nii.gz" ]; then
-    echo "$subj_id  | PASS"
-  else
-    echo "$subj_id  | FAIL"
-  fi
-done
-```
-
-### 2. Visual Inspection
-Certain steps require visual QC in FSLeyes or another viewer:
-- **Skull stripping** (Step 2): overlay brain extraction on original T1
-- **EDDY correction** (Step 8): scroll through corrected volumes checking for artifacts
-- **Tensor fitting** (Step 11): verify FA maps look reasonable (white matter bright, CSF dark)
-
-### 3. Quantitative Metrics
-Use automated tools to compute QC metrics:
-- **eddy_quad**: per-subject motion, outlier counts, CNR
-- **eddy_squad**: group-level summary statistics
-- Data tracking spreadsheet: record QC outcomes per subject
+- **Missing data** — a job crashed, a file path was wrong, or input was missing
+- **Artifacts** — motion, susceptibility distortion, Gibbs ringing, or signal dropout survived preprocessing
+- **Parameter errors** — wrong b-values, mismatched phase encoding, incorrect mask
 
 ## QC at Each Pipeline Stage
 
-| Stage | QC Method | What to Check |
-|-------|-----------|---------------|
-| 1. DICOM to NIfTI | Automated audit | All expected files present |
-| 2. Skull Stripping | Visual + audit | No over/under-stripping |
-| 3. B0 Concatenation | Automated audit | Correct number of volumes |
-| 4. TOPUP | Visual comparison | Distortions reduced |
-| 5. Mean B0 | Automated audit | 3D output (not 4D) |
-| 6. Brain Masking | Visual overlay | Mask covers brain, excludes skull |
-| 7. Denoising | Visual comparison | Noise reduced without blurring |
-| 8. EDDY | eddy_quad + visual | Motion < 2mm, outliers reasonable |
-| 9. BedpostX | Automated audit | All output files present |
-| 10. Shell Extraction | Volume count | Correct number of volumes |
-| 11. DTIFIT | Visual + range check | FA 0-1, reasonable MD values |
-| 12. Registration | Visual overlay | Good alignment in MNI space |
-| 13. ICV | Range check | 1200-1800 cm^3 for adults |
-| 14. BIDS | Automated audit | BIDS-compliant directory structure |
+The table below summarizes what to check after each step. Detailed guidance for each check is in the linked pages.
 
-## Data Tracking
+| Stage | What to Check | Method |
+|-------|--------------|--------|
+| [1. DICOM to NIfTI](../pipeline/dicom-to-nifti) | All expected files created, .bval/.bvec present | File audit |
+| [2. Skull Stripping](../pipeline/skull-stripping) | Brain fully preserved, no skull remaining | Visual overlay |
+| [3. B0 Concatenation](../pipeline/b0-concatenation) | Correct number of B0 volumes, both PE directions | Volume count |
+| [4. TOPUP](../pipeline/topup) | Frontal/temporal distortions reduced | Visual comparison |
+| [5. Mean B0](../pipeline/mean-b0) | Output is 3D (not 4D), reasonable contrast | `fslinfo` + visual |
+| [6. Brain Masking](../pipeline/brain-masking) | Mask covers brain, excludes skull | Visual overlay |
+| [7. Denoising](../pipeline/denoising-gibbs) | Noise reduced, edges preserved, smooth noise map | Visual comparison |
+| [8. Eddy](../pipeline/eddy) | Motion < 2 mm, few outlier slices, no residual artifacts | `eddy_quad` + visual |
+| [9. BedpostX](../pipeline/bedpostx) | Output directory exists, dyads files present | File audit |
+| [10. Shell Extraction](../pipeline/shell-extraction) | Correct volume count, correct b-values | `fslnvols` + `cat .bval` |
+| [11. DTIFIT](../pipeline/dtifit) | FA in 0–1 range, tracts visible, no artifacts | Visual + `fslstats` |
+| [12. Registration](../pipeline/flirt-registration) | Good alignment in standard space | Visual overlay |
+| [13. ICV](../pipeline/icv-calculation) | Volume within normal range (1200–1800 cm^3) | `fslstats` |
+| [14. BIDS Setup](../pipeline/pyafq-bids) | BIDS-compliant structure, validator passes | `bids-validator` |
 
-Maintain a spreadsheet or CSV tracking QC outcomes per subject. Include columns for:
-- Subject ID
-- Each pipeline stage (pass/fail)
-- Motion parameters from EDDY
-- Notes on any issues
-- Final inclusion/exclusion decision
+## Automated Checks vs. Visual Inspection
 
-See [EDDY QC](./eddy-qc), [Visual Inspection](./visual-inspection), [Audit Scripts](./audit-scripts), and [Exclusion Criteria](./exclusion-criteria) for detailed guidance.
+**Automated checks** (file audits, volume counts, metric thresholds) are efficient and reproducible. They should be your first line of defense — run them immediately after every batch of subjects finishes processing.
+
+**Visual inspection** is irreplaceable for certain steps. No script can reliably judge whether a skull strip looks right or whether an FA map has subtle artifacts. Plan to visually inspect at least these critical stages:
+
+- Skull stripping (Step 2)
+- TOPUP distortion correction (Step 4)
+- Eddy-corrected volumes (Step 8)
+- FA and MD maps (Step 11)
+- Registration to standard space (Step 12)
+
+For large studies (50+ subjects), you may not be able to visually inspect every subject at every stage. Prioritize visual QC at the stages above, and use automated metrics to flag subjects that need closer inspection.
+
+## Tracking QC Results
+
+Maintain a spreadsheet or CSV that records QC outcomes for every subject:
+
+| Column | Example |
+|--------|---------|
+| Subject ID | sub-001 |
+| Skull strip QC | Pass |
+| TOPUP QC | Pass |
+| Eddy mean motion (mm) | 0.83 |
+| Eddy outlier slices (%) | 2.1 |
+| FA range check | Pass |
+| Registration QC | Pass |
+| Notes | Slight frontal signal dropout in vol 42 |
+| Final decision | Include |
+
+This tracking file becomes part of your analysis documentation. When you write your methods section, you can report exactly how many subjects were excluded and why.
+
+:::tip Start QC Tracking on Day One
+Create your QC spreadsheet before you start processing — not after. Add rows as subjects are processed and update them at each stage. This prevents the common situation where you process 100 subjects, realize 10 have problems, and cannot remember which steps you already checked.
+:::
+
+## When Something Looks Wrong
+
+If a subject fails QC at any stage:
+
+1. **Check the inputs** — is the problem in this step, or was a bad input passed forward from an earlier step?
+2. **Check the parameters** — did you use the right configuration files, masks, and settings?
+3. **Try adjusting parameters** — some steps (like skull stripping) can be re-run with different settings
+4. **Decide: fix or exclude** — if the problem cannot be fixed, exclude the subject and document why
+
+See [Failure Recovery](../advanced/failure-recovery) for stage-by-stage troubleshooting and [Exclusion Criteria](./exclusion-criteria) for guidance on when to exclude a subject.
+
+## Detailed QC Guides
+
+- **[Visual Inspection](./visual-inspection)** — FSLeyes commands and what to look for at each stage
+- **[Eddy QC](./eddy-qc)** — Using `eddy_quad` and `eddy_squad` for motion and artifact assessment
+- **[Pipeline Verification Scripts](./audit-scripts)** — Automated scripts to check that all files were created
+- **[Exclusion Criteria](./exclusion-criteria)** — Thresholds for deciding when to exclude a subject

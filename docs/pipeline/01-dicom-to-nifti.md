@@ -46,18 +46,28 @@ A standard DTI preprocessing pipeline requires the following acquisitions per su
 | **Fieldmap AP** | B0 image with anterior-to-posterior phase encoding | Susceptibility distortion correction |
 | **Fieldmap PA** | B0 image with posterior-to-anterior phase encoding | Susceptibility distortion correction |
 
-Your raw DICOM directory structure might look something like:
+Your raw DICOM directory structure might look something like this — but folder names vary widely across scanners and sites:
 
 ```
 $base_dir/dicoms/
   sub-001/
-    T1_MPRAGE/
-    DWI_64dir/
-    FieldMap_AP/
-    FieldMap_PA/
+    T1_MPRAGE/          # or: MPRAGE, 3D_T1, anat_T1w, etc.
+    DWI_64dir/          # or: ep2d_diff, cmrr_mbdiff, DTI, etc.
+    FieldMap_AP/        # or: SpinEchoFieldMap_AP, SE_AP, etc.
+    FieldMap_PA/        # or: SpinEchoFieldMap_PA, SE_PA, etc.
   sub-002/
     ...
 ```
+
+:::tip Finding Your Scan Names
+If you are not sure what your DICOM folders are called, list one subject's directory and look for scan types that match the descriptions above. Scanner vendors use different naming conventions — Siemens, GE, and Philips all name sequences differently. See the [Acquisition Protocols](../foundations/acquisition-protocols) page for a vendor comparison table. You can also do a dry-run conversion to see what dcm2niix detects:
+
+```bash
+dcm2niix -b o -f "%p_%s" /path/to/one/subject/dicoms/
+```
+
+This prints protocol names without converting, helping you identify which folders contain which scan types.
+:::
 
 ## Tool & Command Reference
 
@@ -93,12 +103,16 @@ base_dir="/path/to/project"
 dicom_dir="$base_dir/dicoms"
 nifti_dir="$base_dir/nifti"
 
-# Define expected scan directory names (adjust to match your DICOM folder naming)
+# ============================================================
+# IMPORTANT: Change these to match YOUR scanner's folder names
+# These are examples — your DICOM folders will be named differently
+# List one subject's directory to see what yours are called
+# ============================================================
 declare -A scan_map
-scan_map[struct]="T1_MPRAGE"
-scan_map[dti]="DWI_64dir"
-scan_map[fmapAP]="FieldMap_AP"
-scan_map[fmapPA]="FieldMap_PA"
+scan_map[struct]="T1_MPRAGE"       # Your T1 structural folder name
+scan_map[dti]="DWI_64dir"          # Your diffusion run folder name
+scan_map[fmapAP]="FieldMap_AP"     # Your AP fieldmap folder name
+scan_map[fmapPA]="FieldMap_PA"     # Your PA fieldmap folder name
 
 # Get list of subjects
 subjects=$(ls -d "$dicom_dir"/sub-* 2>/dev/null | xargs -n1 basename)

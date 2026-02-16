@@ -5,48 +5,60 @@ title: "Step 13: ICV Calculation"
 
 # Step 13: Intracranial Volume (ICV) Estimation
 
-:::info Coming Soon
-Full tutorial content is under development. The key concepts and commands are outlined below.
-:::
-
 ## Overview
 
-Estimates the total intracranial volume (ICV) for each subject by segmenting the brain-extracted T1 into three tissue classes (CSF, gray matter, white matter) and summing their volumes. ICV is commonly used as a **covariate** in group-level statistical analyses to control for individual differences in head size.
+This optional step estimates the total intracranial volume (ICV) for each subject by computing the volume of the brain mask from skull stripping. ICV is sometimes used as a **covariate** in group-level statistical analyses to control for individual differences in head size.
 
-## Why ICV Matters
+:::tip When Do You Need ICV?
+Many DTI studies do **not** control for ICV — it depends on your research question and analysis approach. ICV as a covariate is more common in volumetric studies than in diffusion studies. If you are computing tract-based metrics (e.g., mean FA along a tract via pyAFQ), ICV adjustment is typically unnecessary. Consult your statistical analysis plan before deciding.
+:::
 
-Brain volume varies across individuals due to factors like sex, age, and body size. Without controlling for ICV, group differences in DTI metrics could reflect head size rather than microstructural differences.
+## When ICV Matters
+
+- **Voxel-based analysis (VBA)**: comparing FA values voxel-by-voxel across groups where head size differences can confound results
+- **Whole-brain DTI metrics**: computing global mean FA or total white matter volume
+- **Clinical populations**: comparing groups with expected head size differences (e.g., neurodegeneration, developmental disorders)
 
 ## Commands
 
 ```bash
-# Step 1: Tissue segmentation using ANTs Atropos
-Atropos -d 3 \
-  -a "$ants_dir/${subj}_BrainExtractionBrain.nii.gz" \
-  -x "$ants_dir/${subj}_BrainExtractionMask.nii.gz" \
-  -i "KMeans[3]" \
-  -o "[${output_dir}/${subj}_seg.nii.gz, ${output_dir}/${subj}_prob%02d.nii.gz]"
+# ──────────────────────────────────────────────
+# Define paths
+# ──────────────────────────────────────────────
+ants_dir="$base_dir/ants/$subj"
+output_dir="$base_dir/icv"
 
-# Step 2: Calculate total brain volume from the mask
+mkdir -p "$output_dir"
+
+# ──────────────────────────────────────────────
+# Quick ICV from brain mask volume
+# ──────────────────────────────────────────────
 icv=$(fslstats "$ants_dir/${subj}_BrainExtractionMask.nii.gz" -V | awk '{print $2}')
 echo "${subj},${icv}" >> "$output_dir/icv_summary.csv"
+
+# ──────────────────────────────────────────────
+# Optional: tissue segmentation with Atropos (for per-tissue volumes)
+# ──────────────────────────────────────────────
+Atropos -d 3 \
+    -a "$ants_dir/${subj}_BrainExtractionBrain.nii.gz" \
+    -x "$ants_dir/${subj}_BrainExtractionMask.nii.gz" \
+    -i "KMeans[3]" \
+    -o "[${output_dir}/${subj}_seg.nii.gz,${output_dir}/${subj}_prob%02d.nii.gz]"
 ```
 
 ## Expected Output
 
-- `${subj}_seg.nii.gz` — 3-class segmentation (1=CSF, 2=GM, 3=WM)
-- `${subj}_prob00.nii.gz` through `${subj}_prob02.nii.gz` — probability maps for each tissue class
-- `icv_summary.csv` — cumulative CSV with subject IDs and ICV values
+| File | Description |
+|------|-------------|
+| `icv_summary.csv` | CSV with subject ID and ICV in mm³ |
+| `${subj}_seg.nii.gz` | 3-class segmentation (optional, from Atropos) |
 
 ## Quality Check
 
-- Verify segmentation labels by overlaying in FSLeyes
-- Check that ICV values are within a reasonable range (typically 1200-1800 cm^3 for adults)
-
-## References
-
-- Avants BB, et al. (2011). ANTs similarity metric performance in brain image registration. *NeuroImage*, 54(3), 2033-2044.
+- ICV values for healthy adults typically range from **1,200,000–1,800,000 mm³** (1200–1800 cm³)
+- Flag subjects with values far outside this range — likely indicates failed skull stripping
+- If using Atropos, overlay the segmentation on the T1 in FSLeyes to verify labels
 
 ## Next Step
 
-[Step 14: BIDS Conversion & pyAFQ](./pyafq-bids)
+Proceed to **[Step 14: BIDS Conversion & pyAFQ](./pyafq-bids)** to organize your data for automated tract analysis.
