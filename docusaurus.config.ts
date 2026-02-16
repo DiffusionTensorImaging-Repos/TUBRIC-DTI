@@ -86,7 +86,7 @@ const config: Config = {
         },
         {
           href: 'https://github.com/DiffusionTensorImaging-Repos/SDN-IMPACT-DTI',
-          label: 'IMPACT Reference',
+          label: 'Example Repo (IMPACT)',
           position: 'right',
         },
         {
@@ -123,7 +123,7 @@ const config: Config = {
           items: [
             {label: 'TUBRIC', href: 'https://www.temple.edu/research/tubric'},
             {label: 'Temple University', href: 'https://www.temple.edu'},
-            {label: 'IMPACT Reference Pipeline', href: 'https://github.com/DiffusionTensorImaging-Repos/SDN-IMPACT-DTI'},
+            {label: 'Example Repo (IMPACT)', href: 'https://github.com/DiffusionTensorImaging-Repos/SDN-IMPACT-DTI'},
           ],
         },
       ],

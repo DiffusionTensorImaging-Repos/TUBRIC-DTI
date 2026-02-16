@@ -64,7 +64,6 @@ Always redirect output to log files when running pipeline stages. Without logs, 
 |---------|-------------|-----|
 | "Odd number of volumes" | B0 pair has an unexpected number of volumes | Check `fslnvols` on the concatenated B0 file |
 | Distortions look worse after TOPUP | `acqp.txt` has wrong phase encoding directions | Swap the AP and PA rows in `acqp.txt` |
-| TOPUP crashes with numerical error | Extreme susceptibility distortion or very noisy fieldmaps | Try `--subsamp=2,2,2,1,1,1` for more aggressive subsampling |
 | Configuration file not found | Wrong path to TOPUP config | Use `$FSLDIR/etc/flirtsch/b02b0.cnf` (verify this file exists) |
 
 **Re-run**: Re-run Steps 4, 5, 6, and 8.
