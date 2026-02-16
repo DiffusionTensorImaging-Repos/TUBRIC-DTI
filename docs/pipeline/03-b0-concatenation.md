@@ -9,7 +9,7 @@ title: "Step 3: B0 Concatenation"
 
 This step extracts the **B0 (non-diffusion-weighted) volumes** from the anterior-to-posterior (AP) and posterior-to-anterior (PA) fieldmap scans and merges them into a single **4D NIfTI file**. This paired B0 dataset is the required input for **TOPUP**, which uses the opposite-direction distortions to estimate and correct susceptibility-induced geometric warping.
 
-**Further reading:** [Preprocessing of Diffusion Data](https://lcni.uoregon.edu/wiki/preprocessing-of-diffusion-data/) — Lewis Center for Neuroimaging, University of Oregon
+**Further reading:** [Blip-Up-Blip-Down Distortion Correction](https://www.fmrib.ox.ac.uk/primers/intro_primer/ExBox20/IntroBox20.html) — FMRIB Primers walkthrough of merging opposite phase-encoding B0 pairs and applying TOPUP corrections
 
 ## Conceptual Background
 

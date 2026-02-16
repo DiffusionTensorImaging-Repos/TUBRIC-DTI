@@ -9,7 +9,7 @@ title: "Step 11: Tensor Fitting (DTIFIT)"
 
 This step fits the diffusion tensor model to the corrected DWI data, producing voxelwise maps of the core DTI metrics: **Fractional Anisotropy (FA)**, **Mean Diffusivity (MD)**, **Axial Diffusivity (AD)**, and **Radial Diffusivity (RD)**. These scalar maps are the primary output of most DTI studies and form the basis for group-level statistical analyses, tract-based spatial statistics (TBSS), and tractography-based analyses.
 
-**Further reading:** [TBSS #5: Fitting the Tensors](https://andysbrainbook.readthedocs.io/en/latest/TBSS/TBSS_Course/TBSS_05_FittingTensors.html) — Andy's Brain Book
+**Further reading:** [TBSS #5: Fitting the Tensors](https://andysbrainbook.readthedocs.io/en/latest/TBSS/TBSS_Course/TBSS_05_FittingTensors.html) — Andy's Brain Book explanation of eigenvalue decomposition and how FA, MD, AD, RD are derived from the tensor
 
 ## Conceptual Background
 

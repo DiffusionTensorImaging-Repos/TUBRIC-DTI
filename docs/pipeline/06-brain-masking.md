@@ -9,7 +9,7 @@ title: "Step 6: Brain Masking"
 
 This step creates a **binary brain mask** from the mean B0 image using FSL's BET (Brain Extraction Tool). The mask defines which voxels are "brain" and which are not — every downstream processing step uses this mask to restrict computations to brain tissue only, excluding skull, scalp, eyes, and air.
 
-**Further reading:** [Brain Extraction (Skull Stripping)](https://andysbrainbook.readthedocs.io/en/latest/fMRI_Short_Course/Preprocessing/Skull_Stripping.html) — Andy's Brain Book
+**Further reading:** [Brain Extraction (Skull Stripping)](https://andysbrainbook.readthedocs.io/en/latest/fMRI_Short_Course/Preprocessing/Skull_Stripping.html) — Andy's Brain Book explanation of why skull stripping matters and how BET's intensity threshold works
 
 ## Conceptual Background
 

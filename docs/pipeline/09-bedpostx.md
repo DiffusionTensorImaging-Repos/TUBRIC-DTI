@@ -11,7 +11,7 @@ BedpostX (Bayesian Estimation of Diffusion Parameters Obtained using Sampling Te
 
 BedpostX output is required for **probabilistic tractography** (`probtrackx2`). If you only need DTI scalar maps (FA, MD, RD, AD) and are not planning to do tractography, you can skip this step.
 
-**Further reading:** [FDT Tractography Practical](https://fsl.fmrib.ox.ac.uk/fslcourse/2019_Beijing/lectures/FDT/fdt2.html) — FSL Course (Beijing 2019)
+**Further reading:** [FDT Tractography Practical](https://fsl.fmrib.ox.ac.uk/fslcourse/2019_Beijing/lectures/FDT/fdt2.html) — FSL Course walkthrough of BedpostX outputs and how they feed into probtrackx2
 
 ## Conceptual Background
 
