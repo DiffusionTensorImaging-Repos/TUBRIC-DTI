@@ -91,18 +91,9 @@ This sequence reflects the processing standards established by:
 
 ---
 
-## Manual Pipeline vs QSIPrep
+## Automated Alternative: QSIPrep
 
-[QSIPrep](../tools/qsiprep.md) is a containerized alternative that automates many of the same preprocessing steps described in this tutorial. It bundles FSL, ANTs, MRtrix3, and other tools into a Docker/Singularity container.
-
-| | Manual Pipeline | QSIPrep |
-|---|---|---|
-| **Best for** | Learning, custom workflows | Production, reproducibility |
-| **Setup** | Install tools individually | Single container |
-| **Control** | Full parameter control | Automated defaults |
-| **QC** | Manual inspection | Built-in reports |
-
-**Recommendation:** Learn the manual pipeline first to understand what each step does and why. Then consider QSIPrep for production-scale processing. See the full [QSIPrep comparison](../tools/qsiprep.md) for details.
+[QSIPrep](../tools/qsiprep.md) is a containerized tool that automates many of the same preprocessing steps described in this tutorial. It runs inside Docker or Singularity and handles the full workflow automatically. See the [QSIPrep page](../tools/qsiprep.md) for more information.
 
 ---
 
