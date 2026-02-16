@@ -13,7 +13,9 @@ This pipeline follows the standardized preprocessing flow used across major diff
 
 ---
 
-## Full Pipeline: 14 Stages
+## Pipeline Stages
+
+The pipeline presented here covers 14 stages. Your workflow may include fewer or more steps depending on your acquisition, analysis goals, and software choices — this is one well-tested configuration, not the only way to preprocess DTI data.
 
 | Stage | Step | Purpose | Tool(s) |
 |-------|------|---------|---------|
@@ -147,7 +149,7 @@ The full pipeline described in this tutorial has been implemented and applied in
 
 **Repository:** [github.com/DiffusionTensorImaging-Repos/SDN-IMPACT-DTI](https://github.com/DiffusionTensorImaging-Repos/SDN-IMPACT-DTI)
 
-This reference implementation applies all 14 stages to 55 participants with comprehensive quality control at each step. It includes batch processing scripts, configuration files, and QC workflows. Use it as a reference when adapting the pipeline to your own data.
+This reference implementation applies these stages to 55 participants with comprehensive quality control at each step. It includes batch processing scripts, configuration files, and QC workflows. Use it as a reference when adapting the pipeline to your own data.
 
 ---
 

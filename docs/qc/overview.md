@@ -46,15 +46,9 @@ The table below summarizes what to check after each step. Detailed guidance for 
 
 **Automated checks** (file audits, volume counts, metric thresholds) are efficient and reproducible. They should be your first line of defense — run them immediately after every batch of subjects finishes processing.
 
-**Visual inspection** is irreplaceable for certain steps. No script can reliably judge whether a skull strip looks right or whether an FA map has subtle artifacts. Plan to visually inspect at least these critical stages:
+**Visual inspection** is useful at a couple of key stages. The two places where it matters most are **skull stripping** (Step 2) and **eddy correction** (Step 8) — these are the steps where problems are most likely to require manual judgment. Beyond those, checking FA maps (Step 11) is worthwhile as a final sanity check.
 
-- Skull stripping (Step 2)
-- TOPUP distortion correction (Step 4)
-- Eddy-corrected volumes (Step 8)
-- FA and MD maps (Step 11)
-- Registration to standard space (Step 12)
-
-For large studies (50+ subjects), you may not be able to visually inspect every subject at every stage. Prioritize visual QC at the stages above, and use automated metrics to flag subjects that need closer inspection.
+For large studies (50+ subjects), you will not be able to visually inspect every subject at every stage. Use automated metrics and verification scripts to flag subjects that need closer inspection.
 
 ## Tracking QC Results
 

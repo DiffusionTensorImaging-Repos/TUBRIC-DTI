@@ -172,18 +172,9 @@ echo "Saved to eddy_qc_summary.csv"
 The exact field names in `qc.json` depend on your FSL version. Check `qc.json` for one subject to confirm the field names before writing extraction scripts. Common fields include `qc_mot_abs`, `qc_mot_rel`, `qc_outliers_tot`, and `qc_cnr_avg`.
 :::
 
-## Interpreting Results: When to Worry
+## Using These Metrics
 
-| Scenario | Action |
-|----------|--------|
-| Absolute motion 0.3–1.0 mm, few outlier slices | Normal — include |
-| Absolute motion 1.0–2.0 mm, < 5% outlier slices | Borderline — include but note in tracking sheet |
-| Absolute motion > 2.0 mm | Likely exclude — inspect FA maps carefully |
-| > 10% outlier slices | Likely exclude — too much data was replaced by `--repol` |
-| Single large motion spike but otherwise clean | May be ok — check the FA map for artifacts near the spike |
-| Very low CNR compared to group | Check for scanner issues, wrong protocol, or severe motion |
-
-These thresholds are guidelines. See [Exclusion Criteria](./exclusion-criteria) for detailed discussion of threshold selection and population-specific considerations.
+The metrics from `eddy_quad` and `eddy_squad` feed directly into your exclusion decisions. See [Exclusion Criteria](./exclusion-criteria) for threshold recommendations and guidance on when to include or exclude subjects based on these values.
 
 ## References
 

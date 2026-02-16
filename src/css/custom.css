@@ -187,3 +187,61 @@ table th {
   color: var(--ifm-color-emphasis-400);
   font-size: 1.2rem;
 }
+
+/* KaTeX math formulas — ensure visibility in both modes */
+.katex {
+  color: var(--ifm-font-color-base);
+}
+
+.katex-display {
+  color: var(--ifm-font-color-base);
+}
+
+/* Ensure KaTeX SVG elements (sqrt radicals, fraction bars) inherit color */
+.katex .sqrt .sqrt-sign {
+  color: var(--ifm-font-color-base);
+}
+
+.katex .mord,
+.katex .mbin,
+.katex .mrel,
+.katex .mopen,
+.katex .mclose,
+.katex .mfrac .frac-line,
+.katex .overline .overline-line,
+.katex .sqrt .sqrt-line {
+  color: inherit;
+}
+
+/* SVG-based elements (radicals, fraction rules) */
+.katex svg {
+  fill: var(--ifm-font-color-base);
+  stroke: var(--ifm-font-color-base);
+}
+
+.katex .sqrt-sign svg path {
+  fill: var(--ifm-font-color-base);
+}
+
+/* Dark mode specific overrides */
+[data-theme='dark'] .katex {
+  color: #e0e0e0;
+}
+
+[data-theme='dark'] .katex-display {
+  color: #e0e0e0;
+}
+
+[data-theme='dark'] .katex svg {
+  fill: #e0e0e0;
+  stroke: #e0e0e0;
+}
+
+[data-theme='dark'] .katex .sqrt-sign svg path {
+  fill: #e0e0e0;
+}
+
+/* Ensure KaTeX inside tables is readable */
+table .katex {
+  font-size: 0.9em;
+}

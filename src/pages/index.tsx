@@ -50,7 +50,7 @@ const FeatureList: FeatureItem[] = [
     icon: '\uD83D\uDD27',
     description: (
       <>
-        Walk through all 14 preprocessing stages with generalized, copy-paste-ready
+        Walk through each preprocessing stage with generalized, copy-paste-ready
         code, detailed explanations, and quality checks at every step.
       </>
     ),
@@ -95,11 +95,11 @@ function PipelinePreview() {
     <section className={styles.pipelineSection}>
       <div className="container">
         <Heading as="h2" className="text--center" style={{marginBottom: '0.5rem'}}>
-          The DTI Preprocessing Pipeline
+          A DTI Preprocessing Pipeline
         </Heading>
         <p className="text--center" style={{marginBottom: '2rem', color: 'var(--ifm-color-emphasis-600)'}}>
-          14 stages from raw scanner output to analysis-ready diffusion metrics.
-          Click any stage to learn more.
+          One example workflow from raw scanner output to analysis-ready diffusion metrics.
+          Your pipeline may include fewer or more steps depending on your data and goals.
         </p>
         <div className="pipeline-explorer">
           {PIPELINE_STAGES.map((stage, idx) => (

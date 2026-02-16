@@ -13,7 +13,7 @@ Decide your exclusion thresholds **before** you start preprocessing. Ideally, pr
 
 ## Recommended Thresholds
 
-The thresholds below are commonly used in the DTI literature. They are guidelines — not rigid rules — and should be adjusted based on your population, scanner, and research question.
+The thresholds below are standard in DTI preprocessing. They are guidelines — not rigid rules — and should be adjusted based on your population, scanner, and research question.
 
 ### Motion
 

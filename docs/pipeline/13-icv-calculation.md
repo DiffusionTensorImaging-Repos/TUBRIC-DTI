@@ -10,7 +10,7 @@ title: "Step 13: ICV Calculation"
 This optional step estimates the total intracranial volume (ICV) for each subject by computing the volume of the brain mask from skull stripping. ICV is sometimes used as a **covariate** in group-level statistical analyses to control for individual differences in head size.
 
 :::tip When Do You Need ICV?
-Many DTI studies do **not** control for ICV — it depends on your research question and analysis approach. ICV as a covariate is more common in volumetric studies than in diffusion studies. If you are computing tract-based metrics (e.g., mean FA along a tract via pyAFQ), ICV adjustment is typically unnecessary. Consult your statistical analysis plan before deciding.
+Whether to control for ICV depends on your research question, analysis approach, and population. ICV is necessary in some contexts but not others — for example, developmental and aging studies where head size varies systematically across groups often include ICV as a covariate, while studies of healthy adults using tract-based metrics (e.g., mean FA along a tract via pyAFQ) typically do not. Consult your statistical analysis plan before deciding.
 :::
 
 ## When ICV Matters

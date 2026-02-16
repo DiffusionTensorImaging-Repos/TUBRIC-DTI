@@ -121,7 +121,7 @@ NODDI requires at least **two non-zero b-value shells** and is typically run usi
 # Python — AMICO
 import amico
 
-amico.core.setup()
+amico.setup()
 
 ae = amico.Evaluation("study_dir", "subject_id")
 ae.load_data(dwi_filename="dwi.nii.gz",
