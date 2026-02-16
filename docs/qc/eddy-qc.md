@@ -48,7 +48,7 @@ The output `group_qc.pdf` plots each subject as a point for motion and outlier m
 
 ## What to Do with These Metrics
 
-Use the thresholds above to decide which subjects to exclude. See [Exclusion Criteria](./exclusion-criteria) for guidance.
+Subjects exceeding the thresholds above (absolute motion > 2 mm, relative motion > 1 mm, or outlier slices > 10%) should generally be excluded. Define your thresholds before you start processing and report them in your methods section.
 
 ## References
 

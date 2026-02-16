@@ -11,7 +11,7 @@ In any study with more than a handful of subjects, some will fail at various pre
 
 When a subject fails:
 
-1. **Identify** which subjects failed — use [verification scripts](../qc/audit-scripts) after each stage
+1. **Identify** which subjects failed — check that expected output files exist after each stage
 2. **Diagnose** why it failed — check error messages, log files, and inspect inputs
 3. **Fix** the underlying issue — correct a path, adjust a parameter, or fix an input file
 4. **Re-run** only the failed subject from the failed stage onward

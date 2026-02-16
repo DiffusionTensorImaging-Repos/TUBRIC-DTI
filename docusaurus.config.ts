@@ -85,11 +85,6 @@ const config: Config = {
           position: 'left',
         },
         {
-          to: '/docs/qc/overview',
-          label: 'QA/QC',
-          position: 'left',
-        },
-        {
           href: 'https://github.com/DiffusionTensorImaging-Repos/SDN-IMPACT-DTI',
           label: 'IMPACT Reference',
           position: 'right',
