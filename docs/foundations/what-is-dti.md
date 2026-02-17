@@ -57,7 +57,7 @@ $$
 
 where $\bar{\lambda} = (\lambda_1 + \lambda_2 + \lambda_3) / 3$ is the mean of the eigenvalues.
 
-**What it tells you:** FA ranges from 0 (perfectly isotropic, like CSF) to 1 (perfectly anisotropic, diffusion entirely along one axis). In practice, healthy white matter typically has FA values between 0.4 and 0.8. Higher FA indicates more coherently organized tissue. It is the most widely reported DTI metric.
+**What it tells you:** FA ranges from 0 (isotropic — equal diffusion in all directions) to 1 (strongly directional diffusion along a single axis). White matter typically has FA values between 0.4 and 0.8. Higher FA reflects more directionally coherent tissue structure. It is the most widely reported DTI metric.
 
 ### Mean Diffusivity (MD)
 
@@ -65,7 +65,7 @@ $$
 MD = \bar{\lambda} = \frac{\lambda_1 + \lambda_2 + \lambda_3}{3}
 $$
 
-**What it tells you:** MD is the average rate of diffusion across all three directions, regardless of orientation. It reflects the overall magnitude of water movement. CSF has high MD (water moves freely); white matter has lower MD (water is more constrained). MD is sensitive to edema, cell density, and tissue integrity.
+**What it tells you:** MD is the average rate of diffusion across all three directions, regardless of orientation. It reflects the overall magnitude of water movement. CSF has high MD (water moves freely); white matter has lower MD (water is more constrained).
 
 ### Axial Diffusivity (AD)
 
@@ -81,19 +81,19 @@ $$
 RD = \frac{\lambda_2 + \lambda_3}{2}
 $$
 
-**What it tells you:** RD is the average of the two smaller eigenvalues -- diffusion *perpendicular* to the primary fiber direction. It is thought to be particularly sensitive to myelin integrity, since myelin is the main barrier to radial water movement.
+**What it tells you:** RD is the average of the two smaller eigenvalues -- diffusion *perpendicular* to the primary fiber direction.
 
 ## Interpreting Changes in DTI Metrics
 
 Researchers often use DTI metrics as proxy markers for specific types of white matter pathology. The following are commonly cited interpretive patterns, though it is important to note that these are **simplified heuristics** and that DTI metrics are influenced by many factors simultaneously:
 
-| Change | Possible Interpretation |
+| Change | What It Reflects |
 |---|---|
-| Decreased FA | Less organized or damaged white matter |
-| Increased MD | Increased extracellular water (edema, tissue loss) |
-| Decreased AD | Axonal injury or degeneration |
-| Increased RD | Demyelination or myelin damage |
-| Increased FA in development | Progressive myelination and axonal organization |
+| Decreased FA | Less directionally organized diffusion — could reflect crossing fibers, less coherent structure, or many other factors |
+| Increased MD | More unrestricted water movement overall |
+| Decreased AD | Reduced diffusion along the primary axis |
+| Increased RD | More diffusion perpendicular to the primary axis |
+| Increased FA in development | Increasingly directional tissue organization |
 
 These interpretations should be made cautiously. A single voxel's DTI metrics are influenced by fiber density, crossing fibers, partial volume effects, and noise -- not just the biological process of interest. Group-level studies and converging evidence from multiple modalities strengthen the conclusions you can draw.
 

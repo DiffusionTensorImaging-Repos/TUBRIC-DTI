@@ -58,16 +58,16 @@ const FeatureList: FeatureItem[] = [
     linkText: 'View Pipeline',
   },
   {
-    title: 'Interactive Practice',
+    title: 'Practice Data & Tools',
     icon: '\uD83D\uDE80',
     description: (
       <>
-        Launch a free cloud environment with pre-installed tools and public DTI data.
-        Run real FSL and MRtrix3 commands in your browser -- no setup required.
+        Download public DTI datasets to practice with, and find setup guides for
+        FSL, MRtrix3, ANTs, and other tools used throughout the pipeline.
       </>
     ),
     link: '/docs/reference/practice-data',
-    linkText: 'Try It Out',
+    linkText: 'Get Started',
   },
 ];
 

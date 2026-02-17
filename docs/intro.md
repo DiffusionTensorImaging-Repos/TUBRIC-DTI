@@ -3,43 +3,27 @@ sidebar_position: 1
 title: "Getting Started"
 ---
 
-# Welcome to the TUBRIC DTI Preprocessing Tutorial
+# TUBRIC DTI Preprocessing Tutorial
 
-This tutorial is a practical, concept-driven guide to diffusion tensor imaging (DTI) preprocessing. Whether you are a research assistant running your first diffusion pipeline, a graduate student building intuition for what each step does, or an experienced researcher looking for a structured reference, this resource is designed for you.
+A practical guide to diffusion tensor imaging (DTI) preprocessing, covering concepts, tools, and a complete pipeline.
 
-## What This Tutorial Covers
+## What's Here
 
-You will work through four interconnected areas:
-
-1. **Conceptual Foundations** -- What diffusion MRI measures, how the diffusion tensor works, and what the key file formats and acquisition parameters mean.
-2. **A 14-Stage Preprocessing Pipeline** -- A complete, ordered walkthrough from raw DICOM conversion through tensor fitting and tract-based spatial statistics. Each stage explains *why* the step exists, *what* it does to the data, and *how* to run it.
-3. **Tool Guides** -- Focused references for FSL, MRtrix3, ANTs, and other software you will encounter throughout the pipeline.
-4. **Quality Assurance and Quality Control** -- Strategies for catching problems early, interpreting QC outputs, and deciding when a dataset should be excluded.
+- **Foundations** — What diffusion MRI measures, how the tensor works, and what the key file formats mean.
+- **Pipeline** — An ordered walkthrough from DICOM conversion through tensor fitting and registration. Each step explains what it does and how to run it.
+- **Quality Control** — Visual inspection and eddy QC metrics for catching problems.
+- **Tool Guides** — References for FSL, MRtrix3, ANTs, and other software used throughout the pipeline.
 
 ## Prerequisites
 
-Before starting, you should have:
+- **Basic Linux/Bash familiarity** — navigating directories, running commands, editing text files.
+- **A computing environment** with [FSL](https://fsl.fmrib.ox.ac.uk/fsl/), [ANTs](http://stnava.github.io/ANTs/), and [MRtrix3](https://www.mrtrix.org/) installed. This can be a university cluster, a local workstation, or a container-based setup.
+- **No prior diffusion MRI experience required.** The foundations section covers the basics.
 
-- **Basic Linux/Bash familiarity** -- navigating directories, running commands, editing text files. You do not need to be a scripting expert, but you should be comfortable in a terminal.
-- **Access to a computing environment** with [FSL](https://fsl.fmrib.ox.ac.uk/fsl/), [ANTs](http://stnava.github.io/ANTs/), and [MRtrix3](https://www.mrtrix.org/) installed. This can be a university cluster, a local workstation, or a container-based setup.
-- **No prior diffusion MRI experience required.** The foundations section will bring you up to speed.
+## Example Scripts
 
-## How to Use This Tutorial
+The [SDN-IMPACT-DTI repository](https://github.com/DiffusionTensorImaging-Repos/SDN-IMPACT-DTI) has example scripts that run each pipeline step as a loop across subjects. It can be a useful reference for how these steps look in practice.
 
-The tutorial is organized sequentially, and reading it start-to-finish will give you the most complete understanding. That said, every page is self-contained enough to be useful on its own. If you already understand the basics and need to troubleshoot a specific pipeline stage, jump straight there.
+## Getting Started
 
-Use the sidebar to navigate between sections. Each pipeline stage page includes a summary box at the top so you can quickly determine whether you are in the right place.
-
-## The IMPACT Reference Implementation
-
-Throughout this tutorial, you will see references to the **SDN-IMPACT-DTI** project. The [SDN-IMPACT-DTI repository](https://github.com/DiffusionTensorImaging-Repos/SDN-IMPACT-DTI) is a real-world implementation of this preprocessing pipeline applied to 55 participants in the IMPACT study. It serves as a concrete example of how these concepts and stages come together in a production research workflow.
-
-When a pipeline stage page references IMPACT-specific choices (e.g., which b-value shells were selected, or how many volumes were acquired), this is to ground the discussion in a real dataset rather than abstract parameters.
-
-## Interactive Practice
-
-Where possible, we provide links to **Binder environments** that let you run preprocessing steps on public datasets directly in your browser. These are ideal for experimenting with parameters and building intuition before applying tools to your own data.
-
-## Let's Get Started
-
-Head to the [Foundations](./foundations/what-is-dti) section to begin with the conceptual building blocks, or jump directly to the [Pipeline Overview](./pipeline/overview) if you are ready to preprocess.
+Head to [Foundations](./foundations/what-is-dti) to start with the conceptual building blocks, or go directly to the [Pipeline Overview](./pipeline/overview) if you're ready to preprocess.

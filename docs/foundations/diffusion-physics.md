@@ -133,17 +133,40 @@ A **prolate** (cigar-shaped) ellipsoid indicates a single dominant fiber directi
 
 From the eigenvalues, we compute the metrics used in most DTI studies:
 
-| Metric | Formula | Interpretation |
-|--------|---------|---------------|
-| **FA** (Fractional Anisotropy) | $\sqrt{\frac{3}{2}} \frac{\sqrt{(\lambda_1 - \bar{\lambda})^2 + (\lambda_2 - \bar{\lambda})^2 + (\lambda_3 - \bar{\lambda})^2}}{\sqrt{\lambda_1^2 + \lambda_2^2 + \lambda_3^2}}$ | 0 = perfectly isotropic, 1 = perfectly anisotropic |
-| **MD** (Mean Diffusivity) | $\frac{\lambda_1 + \lambda_2 + \lambda_3}{3}$ | Average diffusion rate — sensitive to cellularity and edema |
-| **AD** (Axial Diffusivity) | $\lambda_1$ | Diffusion along the primary fiber axis |
-| **RD** (Radial Diffusivity) | $\frac{\lambda_2 + \lambda_3}{2}$ | Diffusion perpendicular to the fiber axis |
+#### Fractional Anisotropy (FA)
 
-where $\bar{\lambda} = \frac{\lambda_1 + \lambda_2 + \lambda_3}{3}$ is the mean eigenvalue (equal to MD).
+$$
+FA = \sqrt{\frac{3}{2}} \cdot \frac{\sqrt{(\lambda_1 - \bar{\lambda})^2 + (\lambda_2 - \bar{\lambda})^2 + (\lambda_3 - \bar{\lambda})^2}}{\sqrt{\lambda_1^2 + \lambda_2^2 + \lambda_3^2}}
+$$
+
+where $\bar{\lambda} = (\lambda_1 + \lambda_2 + \lambda_3) / 3$ is the mean eigenvalue. FA ranges from 0 (isotropic — equal diffusion in all directions) to 1 (strongly directional diffusion along a single axis).
+
+#### Mean Diffusivity (MD)
+
+$$
+MD = \frac{\lambda_1 + \lambda_2 + \lambda_3}{3}
+$$
+
+The average rate of diffusion across all three axes, regardless of direction.
+
+#### Axial Diffusivity (AD)
+
+$$
+AD = \lambda_1
+$$
+
+Diffusion rate along the primary axis (the largest eigenvalue).
+
+#### Radial Diffusivity (RD)
+
+$$
+RD = \frac{\lambda_2 + \lambda_3}{2}
+$$
+
+Average diffusion rate perpendicular to the primary axis.
 
 :::tip FA Formula Intuition
-The FA formula looks intimidating, but the concept is simple: it measures the **variance of the eigenvalues** relative to their magnitude. If all three eigenvalues are equal ($\lambda_1 = \lambda_2 = \lambda_3$), there is zero variance and FA = 0. If one eigenvalue is much larger than the others, the variance is high and FA approaches 1. FA was first defined by Basser & Pierpaoli (1996).
+The FA formula measures the **variance of the eigenvalues** relative to their magnitude. If all three eigenvalues are equal ($\lambda_1 = \lambda_2 = \lambda_3$), there is zero variance and FA = 0. If one eigenvalue is much larger than the others, the variance is high and FA approaches 1. FA was first defined by Basser & Pierpaoli (1996).
 :::
 
 For more on what these metrics mean biologically, see [What is DTI?](./what-is-dti).
