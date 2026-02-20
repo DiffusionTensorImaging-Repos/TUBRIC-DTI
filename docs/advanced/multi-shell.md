@@ -162,6 +162,12 @@ ak = dki_fit.ak()   # Axial kurtosis
 rk = dki_fit.rk()   # Radial kurtosis
 ```
 
+### pyAFQ and DKI
+
+When pyAFQ is given multi-shell data (two or more non-zero b-value shells), it automatically fits a DKI model alongside the standard DTI model. The tract profile output will include DKI-derived versions of FA and MD (`dki_fa`, `dki_md`) in addition to the standard DTI versions (`dti_fa`, `dti_md`). No extra configuration is needed — pyAFQ detects the available shells and fits both models.
+
+Since the DKI model accounts for non-Gaussian diffusion, the DKI-derived FA and MD values are generally considered more accurate estimates when multi-shell data is available. If your data has multiple shells, these are worth using as your primary FA and MD measures.
+
 ## Shell Selection Guidelines
 
 When you have multi-shell data, choosing the right shells for each analysis matters:
